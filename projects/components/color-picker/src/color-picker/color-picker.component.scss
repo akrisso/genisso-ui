@@ -1,0 +1,87 @@
+@reference 'tailwindcss';
+
+:host {
+  --emr-color-picker-bg: var(--color-surface-container);
+  --emr-color-picker-border-radius: theme(--radius-md);
+  --emr-color-picker-margin-offset: --spacing(2);
+  --emr-color-picker-border: 0 solid var(--color-neutral-200);
+  --emr-color-picker-padding: --spacing(3);
+  --emr-color-picker-gap: --spacing(2.5);
+  --emr-color-picker-as-dropdown-shadow: theme(--shadow-lg);
+
+  --emr-color-picker-saturation-width: 260px;
+  --emr-color-picker-saturation-height: 110px;
+  --emr-color-picker-saturation-pointer-size: --spacing(5);
+  --emr-color-picker-saturation-pointer-shadow: theme(--shadow-md);
+  --emr-color-picker-saturation-pointer-border: 2px solid white;
+
+  --emr-color-picker-hue-width: var(--emr-color-picker-saturation-width);
+  --emr-color-picker-hue-height: --spacing(3);
+  --emr-color-picker-hue-pointer-size: --spacing(5);
+  --emr-color-picker-hue-pointer-shadow: theme(--shadow-md);
+  --emr-color-picker-hue-pointer-border: 2px solid white;
+
+  --emr-color-picker-alpha-width: var(--emr-color-picker-saturation-width);
+  --emr-color-picker-alpha-height: --spacing(3);
+  --emr-color-picker-alpha-pointer-size: --spacing(5);
+  --emr-color-picker-alpha-pointer-shadow: theme(--shadow-md);
+  --emr-color-picker-alpha-pointer-border: 2px solid white;
+
+  display: inline-grid;
+  user-select: none;
+  position: relative;
+  flex: none;
+  gap: var(--emr-color-picker-gap);
+  background: var(--emr-color-picker-bg);
+  border-radius: var(--emr-color-picker-border-radius);
+  border: var(--emr-color-picker-border);
+  padding: var(--emr-color-picker-padding);
+
+  &.is-disabled {
+    pointer-events: none;
+  }
+
+  &.as-dropdown {
+    box-shadow: var(--emr-color-picker-as-dropdown-shadow);
+  }
+
+  @keyframes emr-color-picker-animation {
+    0% {
+      transform: scale(.9);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+:host-context(.emr-color-picker-overlay-panel) {
+  animation: .15s emr-color-picker-animation;
+}
+
+:host-context(.emr-color-picker-above) {
+  margin-bottom: var(--emr-color-picker-margin-offset);
+  transform-origin: bottom;
+}
+
+:host-context(.emr-color-picker-below) {
+  margin-top: var(--emr-color-picker-margin-offset);
+  transform-origin: top;
+}
+
+:host-context(.emr-color-picker-before) {
+  margin-inline-end: var(--emr-color-picker-margin-offset);
+  transform-origin: right;
+}
+
+:host-context(.emr-color-picker-after) {
+  margin-inline-start: var(--emr-color-picker-margin-offset);
+  transform-origin: left;
+}
+
+:host-context(html.dark) {
+
+}

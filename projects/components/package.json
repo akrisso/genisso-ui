@@ -1,0 +1,57 @@
+{
+  "name": "@elementar-ui/components",
+  "description": "Elementar UI Components - Free and open source Angular UI components based on Material 3 and Tailwind",
+  "version": "0.6.37",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elementarlabs/elementar-ui.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elementarlabs/elementar-ui/issues"
+  },
+  "homepage": "https://elementarui.com",
+  "keywords": [
+    "elementar admin",
+    "angular admin",
+    "admin panel",
+    "angular dashboard",
+    "angular admin panel",
+    "angular material components",
+    "angular admin template",
+    "angular ui"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.schematics.json",
+    "postbuild": "copyfiles schematics/*/schema.json schematics/*/files/** schematics/collection.json ../../dist/components/"
+  },
+  "ng-add": {
+    "save": "devDependencies"
+  },
+  "schematics": "./schematics/collection.json",
+  "devDependencies": {
+    "tailwindcss": "^4.1.14",
+    "postcss": "^8.5.2",
+    "autoprefixer": "^10.4.17",
+    "@types/jsdom": "^21.1.7"
+  },
+  "peerDependencies": {
+    "@angular/cdk": "^20.2.8",
+    "@angular/common": "^20.3.0",
+    "@angular/localize": "^20.3.4",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/material": "^20.2.8",
+    "@angular/router": "^20.3.0",
+    "@angular/ssr": "^20.3.5"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "jsdom": "^26.1.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    "./styles/themes/": "./styles/themes/"
+  }
+}

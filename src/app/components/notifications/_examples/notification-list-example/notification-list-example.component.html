@@ -1,0 +1,39 @@
+<emr-notification-list [notifications]="notifications" [static]="false">
+  <ng-template emrNotificationDef="mentionedInComment" let-notification>
+    <emr-notification [isUnread]="notification.isUnread">
+      <emr-dicebear [key]="notification.actor.id"
+                    [image]="notification.actor.avatarUrl"
+                    emrNotificationAvatar/>
+      <emr-notification-message>
+        <a routerLink="/" emr-notification-actor>{{ notification.actor.name }}</a>
+        {{ notification.message }}
+      </emr-notification-message>
+      <emr-notification-content class="border border-default rounded-lg p-2.5 text-sm">
+       This is a comment.
+      </emr-notification-content>
+      <emr-notification-time>{{ notification.createdAt }}</emr-notification-time>
+    </emr-notification>
+  </ng-template>
+  <ng-template emrNotificationDef="inviteToEditFilesInFolder" let-notification>
+    <emr-notification>
+      <emr-notification-content>
+        invites
+      </emr-notification-content>
+    </emr-notification>
+  </ng-template>
+  <ng-template emrNotificationControlsDef let-notification>
+    <button mat-icon-button [matMenuTriggerFor]="settings">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #settings xPosition="before">
+      <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Disable this type of notification</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>Delete notification</span>
+      </button>
+    </mat-menu>
+  </ng-template>
+</emr-notification-list>
