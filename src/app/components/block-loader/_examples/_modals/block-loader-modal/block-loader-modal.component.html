@@ -1,0 +1,15 @@
+<emr-block-loader [loading]="!loaded()"/>
+<div class="w-[500px]">
+  <h3 class="mat-title-large" mat-dialog-title>Basic dialog</h3>
+  <mat-dialog-content>
+    <p class="mb-3">What's your favorite animal?</p>
+    <mat-form-field class="w-full">
+      <mat-label>Favorite Animal</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-flat-button color="primary" mat-dialog-close cdkFocusInitial>Save</button>
+  </mat-dialog-actions>
+</div>

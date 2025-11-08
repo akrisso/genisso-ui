@@ -1,0 +1,47 @@
+<emr-page-loading-bar fixed/>
+<emr-splash-screen>
+  <emr-text-logo>GENISSO</emr-text-logo>
+</emr-splash-screen>
+<emr-layout layoutId="root" windowMode>
+  <emr-layout-topbar class="border-b border-b-secondary-container">
+    <emr-announcement-global/>
+    <emr-incidents-global/>
+    <header class="px-7">
+      <div class="min-h-18 w-full py-10 md:py-0 space-y-10 md:space-y-0 md:flex items-center gap-10 relative">
+        <a routerLink="/" emr-logo>GENISSO</a>
+        <div>
+          <nav class="flex items-center gap-8 md:absolute md:start-1/2 md:-translate-x-1/2 md:-translate-y-1/2 text-md">
+            <a href="https://elementarui.com"
+               class="hover:underline underline-offset-2">Home</a>
+            <a href="https://pro.elementarui.com" target="_blank"
+               class="hover:underline underline-offset-2">Live Preview</a>
+            <a href="https://docs.elementarui.com" class="hover:underline underline-offset-2 text-primary">Documentation</a>
+            <a mat-flat-button href="https://github.com/elementarlabs/elementar-admin-pro" target="_blank">
+              GET SOURCE
+            </a>
+          </nav>
+        </div>
+        <div class="ms-auto flex items-center gap-4">
+          <emr-color-scheme-switcher matTooltip="Color Theme"
+                                     emrSoundEffect
+                                     (colorSchemeChanged)="onColorSchemeChanged($event)">
+            <mat-icon *emrColorSchemeLight>light_mode</mat-icon>
+            <mat-icon *emrColorSchemeDark>dark_mode</mat-icon>
+          </emr-color-scheme-switcher>
+          <a href="https://x.com/pavel_salauyou" target="_blank">
+            <img src="assets/x.svg" alt="" class="size-5.5">
+          </a>
+          <a mat-stroked-button href="https://github.com/elementarlabs/elementar-ui" target="_blank">Github</a>
+        </div>
+      </div>
+    </header>
+  </emr-layout-topbar>
+  <!-- <emr-layout-sidebar>
+    <app-sidebar class="border-r border-r-secondary-container"/>
+  </emr-layout-sidebar> -->
+  <emr-layout>
+    <emr-layout-body>
+      <router-outlet/>
+    </emr-layout-body>
+  </emr-layout>
+</emr-layout>

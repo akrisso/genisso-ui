@@ -1,0 +1,9 @@
+<div class="border border-default rounded-2xl p-5 w-1/2 h-[400px]" emrBlockLoaderContainer>
+  Some text data for example..
+  <emr-block-loader [loading]="loading()">
+    Loading large data..
+  </emr-block-loader>
+</div>
+<div class="mt-8">
+  <button mat-flat-button (click)="toggleLoading()">Toggle Loading</button>
+</div>

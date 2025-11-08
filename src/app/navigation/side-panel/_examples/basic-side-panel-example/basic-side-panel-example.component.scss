@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+:host {
+  .overridable-side-panel {
+    --emr-side-panel-offset-y: --spacing(5);
+  }
+}
