@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ui-genisso": {
+    "genisso-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {

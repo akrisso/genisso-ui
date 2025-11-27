@@ -1,5 +1,5 @@
 {
-  "name": "ui-genisso",
+  "name": "genisso-ui",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
