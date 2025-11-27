@@ -1,0 +1,23 @@
+
+<main class="flex-1 flex flex-col bg-[#f8f8f8] dark:bg-gray-900">
+  <app-dashboard-header></app-dashboard-header>
+  <div class="flex-1 p-6 overflow-y-auto">
+    <!-- Metric Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <app-metric-card icon="fa-phone" title="Total Calls" value="1,287" trend="+12.5%" trendDirection="up"></app-metric-card>
+      <app-metric-card icon="fa-clock" title="Avg. Call Duration" value="3m 45s" trend="-2.1%" trendDirection="down"></app-metric-card>
+      <app-metric-card icon="fa-check-double" title="Answered Calls" value="98.2%" trend="+0.5%" trendDirection="up"></app-metric-card>
+      <app-metric-card icon="fa-users" title="New Contacts" value="32" trend="-5" trendDirection="down"></app-metric-card>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2">
+        <app-recent-calls></app-recent-calls>
+      </div>
+      <div>
+        <app-ai-assistant></app-ai-assistant>
+      </div>
+    </div>
+  </div>
+</main>

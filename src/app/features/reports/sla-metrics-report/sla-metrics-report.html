@@ -1,0 +1,259 @@
+<div class="flex w-full h-screen font-sans text-white">
+  <app-sidebar></app-sidebar>
+  
+<div class="w-full">
+<div class="p-6 bg-gray-50 min-h-screen">
+      <mat-card class="mb-6">
+        <mat-card-header class="flex items-center justify-between">
+          <mat-card-title class="text-2xl font-bold text-gray-800">
+            SLA Compliance Report
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <mat-form-field appearance="outline" class="specific">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline"  class="specific">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="flex gap-2 mt-4">
+            <button mat-raised-button color="primary" (click)="generateReport()">
+              <mat-icon>search</mat-icon>
+              Generate Report
+            </button>
+            <button mat-raised-button (click)="exportReport()">
+              <mat-icon>download</mat-icon>
+              Export
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 enter-container" animate.enter="enter-animation">
+        <mat-card class="relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-green-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+          <mat-card-content class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+              <mat-icon class="text-4xl text-green-600">check_circle</mat-icon>
+              <div class="text-right">
+                <h3 class="text-3xl font-bold text-gray-800">{{ summary.avgCompliance }}%</h3>
+                <p class="text-sm text-gray-600">SLA Compliance</p>
+              </div>
+            </div>
+            <mat-progress-bar 
+              mode="determinate" 
+              [value]="summary.avgCompliance"
+              class="h-2 rounded-full"
+              [class]="getComplianceBarClass(summary.avgCompliance)">
+            </mat-progress-bar>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+          <mat-card-content class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+              <mat-icon class="text-4xl text-blue-600">schedule</mat-icon>
+              <div class="text-right">
+                <h3 class="text-3xl font-bold text-gray-800">{{ summary.avgWaitTime }}</h3>
+                <p class="text-sm text-gray-600">Avg Wait Time</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Target: &lt; 2:00 minutes</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+          <mat-card-content class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+              <mat-icon class="text-4xl text-purple-600">trending_up</mat-icon>
+              <div class="text-right">
+                <h3 class="text-3xl font-bold text-gray-800">{{ summary.avgServiceLevel }}%</h3>
+                <p class="text-sm text-gray-600">Service Level</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Target: &gt; 80%</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-orange-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+          <mat-card-content class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+              <mat-icon class="text-4xl text-orange-600">phone_missed</mat-icon>
+              <div class="text-right">
+                <h3 class="text-3xl font-bold text-gray-800">{{ summary.totalAbandoned }}</h3>
+                <p class="text-sm text-gray-600">Abandoned Calls</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">{{ summary.abandonRate }}% abandon rate</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="text-lg font-semibold">SLA Compliance Trend</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="space-y-3">
+              <div *ngFor="let item of slaMetrics.slice(0, 5)" class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">{{ item.date }}</span>
+                <div class="flex items-center gap-2 flex-1 mx-4">
+                  <mat-progress-bar 
+                    mode="determinate" 
+                    [value]="item.slaCompliance"
+                    [class]="getComplianceBarClass(item.slaCompliance)"
+                    class="flex-1 h-2 rounded-full">
+                  </mat-progress-bar>
+                  <span class="text-sm font-semibold" [class]="getComplianceTextClass(item.slaCompliance)">
+                    {{ item.slaCompliance }}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="text-lg font-semibold">Daily Performance Summary</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-white">thumb_up</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600">Within SLA</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ summary.totalWithinSLA }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-white">warning</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600">SLA Breached</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ summary.totalBreached }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                    <mat-icon class="text-white">call</mat-icon>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600">Total Calls</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ summary.totalCalls }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="text-lg font-semibold">Detailed SLA Metrics</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="overflow-x-auto">
+            <table mat-table [dataSource]="slaMetrics" class="w-full">
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Date</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="font-medium">{{ row.date }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="totalCalls">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Total Calls</th>
+                <td mat-cell *matCellDef="let row">{{ row.totalCalls }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="withinSLA">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Within SLA</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="text-green-600 font-semibold">{{ row.withinSLA }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="breachedSLA">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Breached</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="text-red-600 font-semibold">{{ row.breachedSLA }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="slaCompliance">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Compliance</th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="flex items-center gap-2">
+                    <mat-progress-bar 
+                      mode="determinate" 
+                      [value]="row.slaCompliance"
+                      [class]="getComplianceBarClass(row.slaCompliance)"
+                      class="w-24 h-2 rounded-full">
+                    </mat-progress-bar>
+                    <span [class]="getComplianceTextClass(row.slaCompliance)" class="font-semibold">
+                      {{ row.slaCompliance }}%
+                    </span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="averageWaitTime">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Avg Wait</th>
+                <td mat-cell *matCellDef="let row">
+                  <span [class]="getWaitTimeClass(row.averageWaitTime)">
+                    {{ row.averageWaitTime }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="abandonedCalls">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Abandoned</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="text-orange-600 font-semibold">{{ row.abandonedCalls }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="serviceLevel">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Service Level</th>
+                <td mat-cell *matCellDef="let row">
+                  <span [class]="getServiceLevelClass(row.serviceLevel)" class="font-semibold">
+                    {{ row.serviceLevel }}%
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                  class="hover:bg-gray-50 transition-colors"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    </div>

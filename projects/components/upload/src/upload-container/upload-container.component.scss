@@ -1,9 +1,0 @@
-:host {
-  display: block;
-
-  .hints {
-    &:empty {
-      display: none;
-    }
-  }
-}

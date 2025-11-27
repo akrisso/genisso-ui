@@ -3,21 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "paths": {
-      "@store/*": [
-        "./src/app/@store/*"
-      ],
-      "@meta/*": [
-        "./src/app/@meta/*"
-      ],
-      "@app/*": [
-        "./src/app/@app/*"
-      ],
-      "@elementar-ui/components/*": ["./projects/components/*"],
-      "@elementar-ui/components": ["./projects/components"],
-    },
     "strict": true,
-    "strictPropertyInitialization": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -27,13 +13,18 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      // "@core/*": ["src/app/core/*"],
+      // "@shared/*": ["src/app/shared/*"],
+      // "@modules/*": ["src/app/modules/*"],
+      // "@environments/*": ["src/environments/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "typeCheckHostBindings": true,
     "strictTemplates": true
   },
   "files": [],

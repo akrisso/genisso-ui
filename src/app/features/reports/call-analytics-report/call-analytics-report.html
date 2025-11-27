@@ -1,0 +1,161 @@
+<div class="flex w-full h-screen font-sans text-white">
+  <app-sidebar></app-sidebar>
+  
+<div class="w-full">
+
+<div class="p-6 bg-gray-50 min-h-screen">
+      <mat-card class="mb-6">
+        <mat-card-header>
+          <mat-card-title class="text-2xl font-bold text-gray-800">
+            Call Analytics Report
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <mat-form-field appearance="outline" class="specific">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="specific">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Report Type</mat-label>
+              <mat-select [(ngModel)]="reportType">
+                <mat-option value="daily">Daily</mat-option>
+                <mat-option value="weekly">Weekly</mat-option>
+                <mat-option value="monthly">Monthly</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="flex gap-2 mt-4">
+            <button mat-raised-button color="primary" (click)="generateReport()">
+              <mat-icon>search</mat-icon>
+              Generate Report
+            </button>
+            <button mat-raised-button (click)="exportReport()">
+              <mat-icon>download</mat-icon>
+              Export to CSV
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 enter-container" animate.enter="enter-animation">
+        <mat-card class="bg-blue-500 text-white">
+          <mat-card-content>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm opacity-90">Total Calls</p>
+                <h2 class="text-3xl font-bold">{{ summary.totalCalls }}</h2>
+              </div>
+              <mat-icon class="text-5xl opacity-75">call</mat-icon>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="bg-green-500 text-white">
+          <mat-card-content>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm opacity-90">Answered</p>
+                <h2 class="text-3xl font-bold">{{ summary.answered }}</h2>
+              </div>
+              <mat-icon class="text-5xl opacity-75">call_received</mat-icon>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="bg-red-500 text-white">
+          <mat-card-content>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm opacity-90">Missed</p>
+                <h2 class="text-3xl font-bold">{{ summary.missed }}</h2>
+              </div>
+              <mat-icon class="text-5xl opacity-75">call_missed</mat-icon>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="bg-purple-500 text-white">
+          <mat-card-content>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm opacity-90">Avg Duration</p>
+                <h2 class="text-3xl font-bold">{{ summary.avgDuration }}</h2>
+              </div>
+              <mat-icon class="text-5xl opacity-75">timer</mat-icon>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="overflow-x-auto">
+            <table mat-table [dataSource]="analyticsData" class="w-full">
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Date</th>
+                <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="totalCalls">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Total Calls</th>
+                <td mat-cell *matCellDef="let row">{{ row.totalCalls }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="inboundCalls">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Inbound</th>
+                <td mat-cell *matCellDef="let row">{{ row.inboundCalls }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="outboundCalls">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Outbound</th>
+                <td mat-cell *matCellDef="let row">{{ row.outboundCalls }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="missedCalls">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Missed</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="text-red-600 font-semibold">{{ row.missedCalls }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="averageDuration">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Avg Duration</th>
+                <td mat-cell *matCellDef="let row">{{ row.averageDuration }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="totalDuration">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Total Duration</th>
+                <td mat-cell *matCellDef="let row">{{ row.totalDuration }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="answerRate">
+                <th mat-header-cell *matHeaderCellDef class="font-bold">Answer Rate</th>
+                <td mat-cell *matCellDef="let row">
+                  <span [class]="getAnswerRateClass(row.answerRate)">
+                    {{ row.answerRate }}%
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                  class="hover:bg-gray-50 transition-colors"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    </div>
+    </div>

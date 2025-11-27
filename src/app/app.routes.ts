@@ -1,43 +1,112 @@
-import { Routes } from '@angular/router';
+// src/app/app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+// Layouts
+import { PublicLayout } from './features/web/layouts/public-layout/public-layout';
+import { DashboardLayout } from './features/dashboard/layouts/dashboard-layout/dashboard-layout';
+
+// Guards
+// import { AuthGuard } from './core/guards/auth.guard';
+// import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
+  // Public web routes
   {
     path: '',
-    loadChildren: () => import('./web/web.module').then(c => c.WebModule)
+    component: PublicLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/web/web.module').then(m => m.WebModule)
+      }
+    ]
   },
+
+  // Authentication routes
   {
-    path: 'overview',
-    loadComponent: () => import('./overview/overview.component').then(c => c.OverviewComponent),
-    title: 'Overview'
+    path: 'auth',
+    component: PublicLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/auth/auth-module').then(m => m.AuthModule)
+      }
+    ]
   },
+
+  // Protected application routes
   {
-    path: 'installation',
-    loadComponent: () => import('./installation/installation').then(c => c.Installation),
-    title: 'Installation'
+    path: '',
+    component: DashboardLayout,
+    // canActivate: [AuthGuard],
+    children: [
+      // Dashboard
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./features/dashboard/dashboard-module').then(m => m.DashboardModule)
+      },
+
+      // Contacts
+    //   {
+    //     path: 'contacts',
+    //     loadChildren: () => import('./features/contacts/contacts-module').then(m => m.ContactsModule)
+    //   },
+
+      // Calls
+    //   {
+    //     path: 'calls',
+    //     loadChildren: () => import('./features/calls/calls-module').then(m => m.CallsModule)
+    //   },
+
+      // Messages
+    //   {
+    //     path: 'messages',
+    //     loadChildren: () => import('./modules/messages/messages.module').then(m => m.MessagesModule)
+    //   },
+
+      // Analytics
+    //   {
+    //     path: 'analytics',
+    //     loadChildren: () => import('./modules/analytics/analytics.module').then(m => m.AnalyticsModule),
+    //     // canActivate: [RoleGuard],
+    //     data: { roles: ['admin', 'manager'] }
+    //   },
+
+      // Settings
+    //   {
+    //     path: 'settings',
+    //     loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
+    //   },
+    {
+      path: 'reports',
+      loadChildren: () => import('./features/reports/reports-module').then(m => m.ReportsModule)
+    },
+
+      // Redirect empty path to dashboard
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
   },
-  {
-    path: 'theme',
-    loadChildren: () => import('./theme/theme.module').then(m => m.ThemeModule)
-  },
-  {
-    path: 'forms',
-    loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule)
-  },
-  {
-    path: 'components',
-    loadChildren: () => import('./components/components.module').then(m => m.ComponentsModule)
-  },
-  {
-    path: 'navigation',
-    loadChildren: () => import('./navigation/navigation.module').then(m => m.NavigationModule)
-  },
-  {
-    path: 'micro-charts',
-    loadChildren: () => import('./micro-charts/micro-charts.module').then(m => m.MicroChartsModule)
-  },
+
+  // 404 Not Found
   {
     path: '**',
-    title: 'Page Not Found',
-    loadComponent: () => import('./error/not-found/not-found.component').then(c => c.NotFoundComponent)
+    redirectTo: '/dashboard'
   }
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes, {
+    useHash: false,
+    scrollPositionRestoration: 'enabled',
+    anchorScrolling: 'enabled',
+    enableTracing: false, // Set to true for debugging
+    onSameUrlNavigation: 'reload'
+  })],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
