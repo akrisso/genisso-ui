@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
         if (isAuthenticated) {
           // Check for role-based access if specified in route data
           const requiredRoles = route.data['roles'] as Array<string> | undefined;
-          
+
           if (requiredRoles && user) {
             const hasRequiredRole = requiredRoles.includes(user.role);
             

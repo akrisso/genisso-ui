@@ -35,6 +35,11 @@ export const routes: Routes = [
     ]
   },
 
+  {
+      path: 'super',
+      loadChildren: () => import('./features/super-admin/super-admin-module').then(m => m.SuperAdminModule)
+    },
+
   // Protected application routes
   {
     path: '',
